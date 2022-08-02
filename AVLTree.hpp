@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   AVLTree.hpp                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ybouddou <ybouddou@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/27 02:38:59 by conanyedo         #+#    #+#             */
-/*   Updated: 2022/06/10 09:57:58 by ybouddou         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef AVLTREE_HPP
 # define AVLTREE_HPP
@@ -26,9 +15,9 @@ namespace ft
 		int		balanceFactor;
 		int		height;
 		
-		Node() : parent(nullptr), left(nullptr), right(nullptr) {}
+		Node() : parent(u_nullptr), left(u_nullptr), right(u_nullptr), balanceFactor(0), height(0) {}
 		Node(const T& data) : data(data){}
-		Node(const T& data, const int height) : data(data), parent(nullptr), left(nullptr), right(nullptr), balanceFactor(0), height(height) {}
+		Node(const T& data, const int height) : data(data), parent(u_nullptr), left(u_nullptr), right(u_nullptr), balanceFactor(0), height(height) {}
 	};
 
 	//SECTION - BALANCED BINARY SEARCH TREE
@@ -50,30 +39,36 @@ namespace ft
 			size_type		_size;
 		
 		public:
-			AVLTree(const allocator_type& alloc = allocator_type(), const key_compare& cmp = key_compare()) : _root(nullptr), _end(nullptr), _alloc(alloc), _cmp(cmp), _size(0)
+			AVLTree(const allocator_type& alloc = allocator_type(), const key_compare& cmp = key_compare()) : _root(u_nullptr), _end(u_nullptr), _alloc(alloc), _cmp(cmp), _size(0)
 			{
 				_end = _alloc.allocate(1);
-				_alloc.construct(_end);
+				_alloc.construct(_end, Node<T>());
 			}
 			~AVLTree()
 			{
 				clear();
 				_alloc.deallocate(_end, 1);
-				_end = nullptr;
+				_end = u_nullptr;
 			}
+			nodePtr getRoot(){return _root;}
 			size_type size() const {return _size;}
 			size_type max_size() const {return _alloc.max_size();}
 			allocator_type get_allocator() const {return (this->_alloc);}
-			nodePtr	getEnd() const {return (this->_end);}
-			nodePtr	getMin(nodePtr node = nullptr) const
+			nodePtr	getEnd() const 
 			{
+				return (this->_end);
+			}
+			nodePtr	getMin(nodePtr node = u_nullptr) const
+			{
+				if (_size == 0)
+					return(_end);
 				if (!node)
 					node = _root;
 				while (node && node->left)
 					node = node->left;
 				return node;
 			}
-			nodePtr	getMax(nodePtr node = nullptr)
+			nodePtr	getMax(nodePtr node = u_nullptr) const
 			{
 				if (!node)
 					node = _root;
@@ -81,7 +76,7 @@ namespace ft
 					node = node->right;
 				return node;
 			}
-			nodePtr	lowerBound(const value_type& data)
+			nodePtr	lowerBound(const value_type& data) const
 			{
 				nodePtr node = getMin();
                 while (node != _end)
@@ -92,7 +87,7 @@ namespace ft
                 }
                 return (_end);
 			}
-			nodePtr	upperBound(const value_type& data)
+			nodePtr	upperBound(const value_type& data) const
 			{
 				nodePtr node = getMin();
                 while (node != _end)
@@ -128,15 +123,39 @@ namespace ft
 				clear(_root);
 				_size = 0;
 			}
-			nodePtr	find(const value_type& data)
+			nodePtr	find(const value_type& data) const
 			{
-				return find(data, _root);
+				return (find(data, _root));
 			}
 			void	insert(const value_type data)
 			{
 				insert(data, _root, _end);
 				_end->left = _root;
 				_root->parent = _end;
+			}
+			void	insert(const value_type& data, nodePtr &node, nodePtr& parent)
+			{
+				if (!node)
+				{
+					node = _alloc.allocate(1);
+					_alloc.construct(node, data);
+					node->right = u_nullptr;
+					node->left = u_nullptr;
+					node->parent = parent;
+					node->balanceFactor = 0;
+					node->height = 0;
+					_size++;
+					return ;
+				}
+				if (_cmp(data.first, node->data.first))
+					insert(data, node->left, node);
+				else
+				{
+
+					insert(data, node->right, node);
+				}
+				update(node);
+				balance(node);
 			}
 			void	erase(const value_type& data)
 			{
@@ -193,34 +212,19 @@ namespace ft
 				update(node);
 				balance(node);
 			}
-			void	insert(const value_type& data, nodePtr &node, nodePtr& parent)
-			{
-				if (!node)
-				{
-					node = _alloc.allocate(1);
-					_alloc.construct(node, data, 0);
-					node->parent = parent;
-					_size++;
-					return ;
-				}
-				if (_cmp(data.first, node->data.first))
-					insert(data, node->left, node);
-				else
-					insert(data, node->right, node);
-				update(node);
-				balance(node);
-			}
-			nodePtr	find(const value_type& data, nodePtr& node)
+			nodePtr	find(const value_type& data, const nodePtr& node) const
 			{
 				if (!node || node == _end)
 					return (_end);
 				if (data.first == node->data.first)
+				{
 					return (node);
+				}
 				if (_cmp(data.first, node->data.first))
 					return (find(data, node->left));
 				return (find(data, node->right));
 			}
-			nodePtr	successor(nodePtr node)
+			nodePtr	successor(nodePtr node) const
 			{
 				nodePtr	parent = node->parent;
 				nodePtr	tmp = node;
@@ -248,7 +252,7 @@ namespace ft
 					clear(node->left);
 					clear(node->right);
 					_alloc.deallocate(node, 1);
-					node = nullptr;
+					node = u_nullptr;
 				}
 			}
 			void	update(nodePtr node)
@@ -269,14 +273,14 @@ namespace ft
 			{
 				if (node->balanceFactor < -1)
 				{
-					if (node->left->balanceFactor <= 0)
+					if (node->left && node->left->balanceFactor <= 0)
 						leftLeftCase(node);
 					else
 						leftRightCase(node);
 				}
 				else if (node->balanceFactor > 1)
 				{
-					if (node->right->balanceFactor >= 0)
+					if (node->right && node->right->balanceFactor >= 0)
 						rightRightCase(node);
 					else
 						rightLeftCase(node);

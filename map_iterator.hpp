@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   map_iterator.hpp                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ybouddou <ybouddou@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/27 03:18:48 by conanyedo         #+#    #+#             */
-/*   Updated: 2022/06/10 09:58:35 by ybouddou         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MAP_ITERATOR_HPP
 # define MAP_ITERATOR_HPP
 
@@ -17,26 +5,23 @@
 
 namespace ft
 {
-	//SECTION - ITERATOR
 	template <class T, class nodePtr>
 	class mapiterator
 	{
-		//SECTION - MEMBER TYPES
 		public:
 			typedef typename iterator_traits<T>::difference_type  	difference_type;
 			typedef typename iterator_traits<T>::value_type  		value_type;
 			typedef typename iterator_traits<T>::pointer  			pointer;
 			typedef typename iterator_traits<T>::reference			reference;
-			typedef std::bidirectional_iterator_tag					iterator_category;
+			typedef ft::bidirectional_iterator_tag					iterator_category;
 		
 		private:
 			nodePtr	node;
-		//SECTION - MEMBER FUNCTIONS
 		public:
-			mapiterator() : node(nullptr) {}
+			mapiterator() : node(u_nullptr) {}
 			explicit mapiterator(nodePtr ptr) : node(ptr) {}
 			template <class Iter, class nodeptr>
-			mapiterator (const mapiterator<Iter, nodeptr>& it) : node(it.node) {}
+			mapiterator (const mapiterator<Iter, nodeptr>& it) : node(it.base()) {}
 			nodePtr base() const{return node;}
 			reference operator*() const{return node->data;}
 			pointer operator->() const {return (&(node->data));}
@@ -106,18 +91,46 @@ namespace ft
 				}
 			}
 	};
-	//SECTION - NON MEMBER FUNCTION OVERLOADS
 	template <class Iter, class nodeptr>
 	bool operator== (const mapiterator<Iter, nodeptr>& lhs,
 					const mapiterator<Iter, nodeptr>& rhs)
 	{
 		return (lhs.base() == rhs.base());
 	}
+
+	template <class Iter_L, class Iter_R, class nodeptr>
+	bool operator== (const mapiterator<Iter_L, nodeptr>& lhs,
+					const mapiterator<Iter_R, nodeptr>& rhs)
+	{
+		return (lhs.base() == rhs.base());
+	}
+
 	template <class Iter, class nodeptr>
 	bool operator!= (const mapiterator<Iter, nodeptr>& lhs,
 					const mapiterator<Iter, nodeptr>& rhs)
 	{
 		return (lhs.base() != rhs.base());
+	}
+
+	template <class Iter_L, class Iter_R, class nodeptr>
+	bool operator!= (const mapiterator<Iter_L, nodeptr>& lhs,
+					const mapiterator<Iter_R, nodeptr>& rhs)
+	{
+		return (lhs.base() != rhs.base());
+	}
+
+	template <class Iter, class nodeptr>
+	bool operator<= (const mapiterator<Iter, nodeptr>& lhs,
+					const mapiterator<Iter, nodeptr>& rhs)
+	{
+		return (lhs.base().data.first_tpye <= rhs.base().data.first_tpye);
+	}
+
+	template <class Iter, class nodeptr>
+	bool operator>= (const mapiterator<Iter, nodeptr>& lhs,
+					const mapiterator<Iter, nodeptr>& rhs)
+	{
+		return (lhs.base().data.first_tpye >= rhs.base().data.first_tpye);
 	}
 }
 
