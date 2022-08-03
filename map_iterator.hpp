@@ -6,7 +6,7 @@
 /*   By: scha <scha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 23:48:42 by scha              #+#    #+#             */
-/*   Updated: 2022/08/04 00:01:15 by scha             ###   ########.fr       */
+/*   Updated: 2022/08/04 00:30:23 by scha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ namespace ft
 			mapiterator() : node(u_nullptr) {}
 			explicit mapiterator(nodePtr ptr) : node(ptr) {}
 			template <class Iter, class nodeptr>
-			mapiterator (const mapiterator<Iter, nodeptr>& it) : node(it.base()) {}
+			explicit mapiterator (const mapiterator<Iter, nodeptr>& it) : node(it.base()) {}
+			template <class Iter, class nodeptr>
+			mapiterator (mapiterator<Iter, nodeptr>& it) : node(it.base()) {}
 			nodePtr base() const{return node;}
 			reference operator*() const{return node->data;}
 			pointer operator->() const {return (&(node->data));}
