@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.hpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: scha <scha@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/03 23:48:57 by scha              #+#    #+#             */
+/*   Updated: 2022/08/03 23:48:57 by scha             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef UTILS_HPP
 # define UTILS_HPP
 
@@ -60,8 +72,14 @@ namespace ft
 		{
 			if (comp(*first1, *first2))
 				return (true);
+			if (first1->second > first2->second)
+					return (false);
 			if (comp(*first2, *first1))
+			{
 				return (false);
+			}
+			if (first1->second < first2->second)
+					return (true);
 		}
 		return (first1 == last1) && (first2 != last2);
 	}

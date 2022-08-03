@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map.hpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: scha <scha@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/03 23:49:54 by scha              #+#    #+#             */
+/*   Updated: 2022/08/03 23:49:56 by scha             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MAP_HPP
 # define MAP_HPP
@@ -25,9 +36,9 @@ namespace ft
 					key_compare comp;
 					value_compare(key_compare c) : comp(c) {}
 				public:
-					bool operator()(const value_type& lhs, const value_type& rhs) const //NOTE - Fuction object
+					bool operator()(const value_type& lhs, const value_type& rhs) const 
 					{
-						return comp(lhs.first, rhs.first);
+						return (comp(lhs.first, rhs.first));
 					}
 			};
 			
@@ -58,8 +69,13 @@ namespace ft
 			{
 				while (first != last)
 				{
-					_tree.insert(*first);
-					first++;
+					if (_tree.find(*first) != _tree.getEnd())
+						first++;
+					else
+					{
+						_tree.insert(*first);
+						first++;
+					}
 				}
 			}
 
@@ -315,7 +331,7 @@ namespace ft
 			template <typename Key, typename T, typename Compare>
 			bool operator<(const map<Key, T, Compare> &lhs, const map<Key, T, Compare> &rhs)
 			{
-				return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), lhs.value_comp()));
+				return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), lhs.value_comp()));
 			}
 
 			template <typename Key, typename T, typename Compare>
@@ -327,7 +343,7 @@ namespace ft
 			template <typename Key, typename T, typename Compare>
 			bool operator>(const map<Key, T, Compare> &lhs, const map<Key, T, Compare> &rhs)
 			{
-				return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end(), rhs.value_comp()));
+				return (lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end(), rhs.value_comp()));
 			}
 
 			template <typename Key, typename T, typename Compare>

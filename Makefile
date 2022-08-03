@@ -1,6 +1,6 @@
 NAME = Containers
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++98 -g -fsanitize=leak
+CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC =	Containers.cpp
 

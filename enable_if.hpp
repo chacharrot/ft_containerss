@@ -1,19 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   enable_if.hpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: scha <scha@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/03 23:49:18 by scha              #+#    #+#             */
+/*   Updated: 2022/08/03 23:49:20 by scha             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef ENABLE_IF_HPP
 # define ENABLE_IF_HPP
 
+#include "utils.hpp"
+
 namespace ft
 {
-	template <bool, class T = void> //NOTE - Main template struct
+	template <bool, class T = void>
 	struct enable_if {};
 
-	template <class T> //NOTE - Specialized template struct
-	struct enable_if<true, T> //ANCHOR - in case of true
+	template <class T>
+	struct enable_if<true, T> 
 	{
 		typedef T type;
 	};
 
-	template <class T> //NOTE - Main template struct
+	template <class T>
 	struct is_integral
 	{
 		static const bool value = false;
@@ -94,6 +107,23 @@ namespace ft
 	struct is_integral<wchar_t>
 	{
 		static const bool value = true;
+	};
+
+	template <class T>
+	struct is_random_access_tag
+	{
+		static const bool value = false;
+	};
+	template <>
+	struct is_random_access_tag<class random_access_iterator_tag>
+	{
+		static const bool value = true;
+	};
+
+		template <>
+	struct is_random_access_tag<class bidirectional_iterator_tag>
+	{
+		static const bool value = false;
 	};
 }
 

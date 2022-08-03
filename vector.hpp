@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vector.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: scha <scha@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/03 23:48:51 by scha              #+#    #+#             */
+/*   Updated: 2022/08/03 23:50:33 by scha             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
@@ -57,9 +68,14 @@ namespace ft
 					const allocator_type& alloc = allocator_type(),
 					typename enable_if<!is_integral <InputIterator>::value, InputIterator>::type * = u_nullptr)
 			{
-				size_type	i = -1;
+				InputIterator	tmp = first;
+				size_type		count = 0;
+				size_type		i = -1;
+
+				while(tmp++ != last)
+					count++;
 				_alloc = alloc;
-				_capacity = last - first;
+				_capacity = count;
 				_size = _capacity;
 				_arr = _alloc.allocate(_capacity);
 				while (++i < _capacity)
@@ -218,9 +234,13 @@ namespace ft
 						typename enable_if<!is_integral <InputIterator>::value, InputIterator>::type * = u_nullptr)
 						//ANCHOR - SFINAE
 			{
+				InputIterator	tmp = first;
+				size_type	count = 0;
 				size_type	i = -1;
 				
-				_size = last - first;
+				while(tmp++ != last)
+					count++;
+				_size = count;
 				if (_size <= _capacity)
 				{
 					while (++i < _size)
@@ -337,10 +357,14 @@ namespace ft
 						typename enable_if<!is_integral <InputIterator>::value, InputIterator>::type * = u_nullptr)
 						//ANCHOR - SFINAE)
 			{
+				InputIterator tmp2 = first;
 				pointer		tmp;
+				size_type	count = 0;
+				while (tmp2++ != last)
+					count++;
 				size_type	cap = _capacity;
 				size_type	shift = -1;
-				size_type	n = last - first;
+				size_type	n = count;
 				size_type	pos = position - this->begin();
 				size_type	newSize = ((pos + n - 1) >= (_size + n - 1)) ? (pos + n - 1): (_size + n - 1);
 				

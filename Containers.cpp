@@ -977,7 +977,7 @@ int main()
     }
 
     // NOTE - Erase elements
-    /*{
+    {
         std::cout << "------------- erase -------------" << std::endl;
         NS::map<char, int> mymap;
         // insert some values:
@@ -998,7 +998,7 @@ int main()
         {
             std::cout << it->first << " => " << it->second << '\n';
         }
-    }*/
+    }
 
     // NOTE - Swap content
     {
@@ -1065,7 +1065,7 @@ int main()
         mymap['d'] = 200;
         it = mymap.find('b');
         if (it != mymap.end())
-            //mymap.erase(it);
+            mymap.erase(it);
         // print content:
         std::cout << "elements in mymap:" << '\n';
         std::cout << "a => " << mymap.find('a')->second << '\n';
